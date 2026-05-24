@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   integrations: [mdx(), tailwind()],
-  site: 'https://your-domain.com',
+  site: 'https://personl-blog.vercel.app',
   output: 'static',
   vite: {
     build: {

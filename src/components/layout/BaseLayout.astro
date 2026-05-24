@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { title, description, containerClass = 'prose' } = Astro.props;
-const fullTitle = `${title} — My Blog`;
+const fullTitle = title.includes('My Blog') ? title : `${title} — My Blog`;
 ---
 
 <!doctype html>
