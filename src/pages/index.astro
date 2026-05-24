@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import ArticleCard from '../components/ui/ArticleCard.astro';
+import JournalCard from '../components/ui/JournalCard.astro';
+import ThoughtCard from '../components/ui/ThoughtCard.astro';
+import ProjectCard from '../components/ui/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const journal = await getCollection('journal', ({ data }) => !data.draft);
+const thoughts = await getCollection('thoughts', ({ data }) => !data.draft);
+const projects = await getCollection('projects', ({ data }) => !data.draft && data.featured);
+
+const allEntries = [
+  ...articles.map(e => ({ ...e, type: 'article' as const })),
+  ...journal.map(e => ({ ...e, type: 'journal' as const })),
+  ...thoughts.map(e => ({ ...e, type: 'thought' as const })),
+  ...projects.map(e => ({ ...e, type: 'project' as const })),
+].sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<BaseLayout title="My Blog" description="个人博客 - 记录思考、分享生活" containerClass="prose">
+  <section class="space-y-16">
+    {allEntries.map((entry) => {
+      switch (entry.type) {
+        case 'article':
+          return <ArticleCard article={entry} />;
+        case 'journal':
+          return <JournalCard entry={entry} />;
+        case 'thought':
+          return <ThoughtCard entry={entry} />;
+        case 'project':
+          return <ProjectCard project={entry} />;
+      }
+    })}
+
+    {allEntries.length === 0 && (
+      <div class="py-32 text-center">
+        <p class="text-2xl font-light text-apple-muted">欢迎来到我的博客</p>
+        <p class="mt-4 text-apple-muted dark:text-apple-muted-dark">内容正在路上...</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>
