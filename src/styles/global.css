@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-apple-bg text-apple-text font-sans antialiased;
+    @apply dark:bg-apple-bg-dark dark:text-apple-text-dark;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1 { @apply text-5xl font-light tracking-tight; }
+  h2 { @apply text-3xl font-normal tracking-tight; }
+  h3 { @apply text-xl font-medium; }
+  p  { @apply leading-relaxed; }
+
+  ::selection {
+    @apply bg-apple-accent/20;
+  }
+}
+
+@layer components {
+  .prose {
+    @apply max-w-prose mx-auto;
+  }
+  .wide {
+    @apply max-w-wide mx-auto;
+  }
+
+  .card {
+    @apply bg-apple-card rounded-card shadow-sm;
+    @apply dark:bg-apple-card-dark dark:border dark:border-apple-divider-dark;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+}

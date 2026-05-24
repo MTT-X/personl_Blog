@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(tasklist)",
+      "Bash(npx *)",
+      "Bash(git -C \"E:/个人博客网站项目\" add -A)",
+      "Bash(git -C \"E:/个人博客网站项目\" status)"
+    ]
+  }
+}
