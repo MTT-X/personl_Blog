@@ -8,7 +8,9 @@ export function formatDate(date: Date): string {
 
 export function estimateReadingTime(text: string): number {
   const wordsPerMinute = 300;
-  const chineseChars = (text.match(/[一-鿿]/g) || []).length;
-  const words = text.split(/\s+/).length + chineseChars;
-  return Math.max(1, Math.ceil(words / wordsPerMinute));
+  const hanRegex = /[\p{Script=Han}]/gu;
+  const chineseChars = (text.match(hanRegex) || []).length;
+  const withoutHan = text.replace(hanRegex, ' ');
+  const nonChineseWords = withoutHan.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil((chineseChars + nonChineseWords) / wordsPerMinute));
 }
