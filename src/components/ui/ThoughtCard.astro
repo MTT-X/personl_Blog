@@ -1,0 +1,16 @@
+---
+import { formatDate } from '../../lib/utils';
+
+const { entry } = Astro.props;
+---
+
+<article class="card p-8 border-l-2 border-apple-accent dark:border-apple-accent-dark">
+  <a href={`/thoughts/${entry.slug}`} class="block">
+    <blockquote class="text-lg leading-relaxed italic text-apple-text dark:text-apple-text-dark">
+      &ldquo;{entry.body.slice(0, 280)}{entry.body.length > 280 ? '...' : ''}&rdquo;
+    </blockquote>
+    <time class="mt-4 block text-xs text-apple-muted dark:text-apple-muted-dark">
+      {formatDate(entry.data.publishedAt)}
+    </time>
+  </a>
+</article>

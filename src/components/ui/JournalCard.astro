@@ -1,0 +1,34 @@
+---
+import { formatDate } from '../../lib/utils';
+
+const { entry } = Astro.props;
+---
+
+<article class="card overflow-hidden group cursor-pointer">
+  <a href={`/journal/${entry.slug}`} class="block">
+    {entry.data.image && (
+      <div class="aspect-video overflow-hidden">
+        <img
+          src={entry.data.image}
+          alt={entry.data.title}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      </div>
+    )}
+    <div class="p-6">
+      <div class="flex items-center gap-2 text-xs text-apple-muted dark:text-apple-muted-dark">
+        <time>{formatDate(entry.data.publishedAt)}</time>
+        {entry.data.location && (
+          <>
+            <span>&middot;</span>
+            <span>{entry.data.location}</span>
+          </>
+        )}
+      </div>
+      <h2 class="mt-2 text-xl font-medium group-hover:text-apple-accent dark:group-hover:text-apple-accent-dark transition-colors duration-150">
+        {entry.data.title}
+      </h2>
+    </div>
+  </a>
+</article>

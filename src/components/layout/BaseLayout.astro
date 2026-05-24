@@ -1,6 +1,7 @@
 ---
 import Header from './Header.astro';
 import Footer from './Footer.astro';
+import SearchModal from '../search/SearchModal.astro';
 
 interface Props {
   title: string;
@@ -47,5 +48,6 @@ const fullTitle = `${title} — My Blog`;
       <slot />
     </main>
     <Footer />
+    <SearchModal />
   </body>
 </html>

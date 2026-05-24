@@ -1,0 +1,111 @@
+<div id="search-modal" class="fixed inset-0 z-[100] hidden items-start justify-center pt-[15vh] bg-black/20 dark:bg-black/50 backdrop-blur-sm">
+  <div class="w-full max-w-xl bg-apple-card dark:bg-apple-card-dark rounded-xl shadow-2xl border border-apple-divider dark:border-apple-divider-dark overflow-hidden">
+    <!-- Search input -->
+    <div class="flex items-center gap-3 px-4 border-b border-apple-divider dark:border-apple-divider-dark">
+      <svg class="w-4 h-4 text-apple-muted shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <title>搜索</title>
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+      <input
+        id="search-input"
+        type="text"
+        placeholder="搜索文章、日志、项目..."
+        class="w-full py-3 text-sm bg-transparent border-none outline-none text-apple-text dark:text-apple-text-dark placeholder:text-apple-muted"
+      />
+      <kbd class="text-xs text-apple-muted bg-apple-divider dark:bg-apple-divider-dark px-1.5 py-0.5 rounded">ESC</kbd>
+    </div>
+    <!-- Results -->
+    <div id="search-results" class="max-h-80 overflow-y-auto p-2 text-sm text-apple-muted">
+      <p class="p-2">输入关键词开始搜索...</p>
+    </div>
+    <!-- Footer hints -->
+    <div class="flex items-center gap-4 px-4 py-2 border-t border-apple-divider dark:border-apple-divider-dark text-xs text-apple-muted">
+      <span>&uarr;&darr; 选择</span>
+      <span>Enter 打开</span>
+      <span>Esc 关闭</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  let pagefind: any = null;
+
+  async function loadPagefind() {
+    if (pagefind) return pagefind;
+    // @ts-ignore - pagefind is generated at build time
+    pagefind = await import('/pagefind/pagefind.js');
+    pagefind.options?.({});
+    return pagefind;
+  }
+
+  const modal = document.getElementById('search-modal')!;
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const results = document.getElementById('search-results')!;
+
+  function openModal() {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    input.focus();
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    input.value = '';
+    results.innerHTML = '<p class="p-2">输入关键词开始搜索...</p>';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      openModal();
+    }
+    if (e.key === 'Escape') closeModal();
+  });
+
+  document.getElementById('search-trigger')?.addEventListener('click', openModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  let debounceTimer: ReturnType<typeof setTimeout>;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      const query = input.value.trim();
+      if (!query) {
+        results.innerHTML = '<p class="p-2">输入关键词开始搜索...</p>';
+        return;
+      }
+      results.innerHTML = '<p class="p-2">搜索中...</p>';
+
+      try {
+        const pf = await loadPagefind();
+        const searchResult = await pf.search(query);
+        if (!searchResult || searchResult.results.length === 0) {
+          results.innerHTML = '<p class="p-2">未找到结果</p>';
+          return;
+        }
+
+        const html = (await Promise.all(
+          searchResult.results.slice(0, 10).map(async (r: any) => {
+            const data = await r.data();
+            const type = data.meta?.type || 'page';
+            const typeLabel: Record<string, string> = { articles: '文章', journal: '日志', thoughts: '思考', projects: '项目' };
+            return `
+              <a href="${data.url}" class="block px-3 py-2.5 rounded-lg hover:bg-apple-divider dark:hover:bg-apple-divider-dark transition-colors">
+                <span class="text-xs text-apple-accent">${typeLabel[type] || ''}</span>
+                <p class="text-apple-text dark:text-apple-text-dark font-medium mt-0.5">${data.meta?.title || r.id}</p>
+              </a>
+            `;
+          })
+        )).join('');
+
+        results.innerHTML = html;
+      } catch {
+        results.innerHTML = '<p class="p-2">搜索功能暂不可用</p>';
+      }
+    }, 200);
+  });
+</script>
