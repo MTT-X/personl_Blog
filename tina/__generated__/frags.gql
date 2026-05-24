@@ -1,0 +1,47 @@
+fragment ArticlesParts on Articles {
+  __typename
+  title
+  publishedAt
+  description
+  tags
+  image
+  draft
+  readingTime
+  body
+}
+
+fragment JournalParts on Journal {
+  __typename
+  title
+  publishedAt
+  description
+  tags
+  image
+  draft
+  gallery
+  location
+  body
+}
+
+fragment ThoughtsParts on Thoughts {
+  __typename
+  title
+  publishedAt
+  tags
+  draft
+  body
+}
+
+fragment ProjectsParts on Projects {
+  __typename
+  title
+  publishedAt
+  description
+  tags
+  image
+  draft
+  url
+  tech
+  featured
+  body
+}

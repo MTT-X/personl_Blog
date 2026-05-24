@@ -29,7 +29,12 @@
       "Bash(export HTTPS_PROXY=\"http://127.0.0.1:7892\")",
       "WebFetch(domain:personl-blog.vercel.app)",
       "mcp__plugin_everything-claude-code_playwright__browser_navigate",
-      "Bash(curl -s https://personl-blog.vercel.app/)"
+      "Bash(curl -s https://personl-blog.vercel.app/)",
+      "Bash(TINA_CLIENT_ID=test TINA_TOKEN=test npx tinacms build)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://personl-blog.vercel.app/admin\")",
+      "Bash(curl -s -I \"https://personl-blog.vercel.app/admin\")",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs"
     ]
   }
 }
