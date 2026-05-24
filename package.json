@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build && npx pagefind --site dist",
+    "build": "astro check && npx tinacms build && astro build && npx pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "tina": "tinacms dev -c \"astro dev\""

@@ -15,7 +15,21 @@
       "Bash(node -e \"console.log\\(require\\('./node_modules/astro/package.json'\\).version\\)\")",
       "Bash(npm i *)",
       "Bash(./node_modules/.bin/astro check *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "mcp__plugin_everything-claude-code_github__create_repository",
+      "Bash(curl -s --connect-timeout 3 http://127.0.0.1:7890)",
+      "Bash(curl -s --connect-timeout 3 http://127.0.0.1:10809)",
+      "Bash(curl -s --connect-timeout 3 http://127.0.0.1:7891)",
+      "Bash(curl -s --connect-timeout 10 https://github.com)",
+      "Bash(cmd.exe *)",
+      "Bash(powershell.exe *)",
+      "Bash(export HTTP_PROXY=\"http://127.0.0.1:7892\")",
+      "Bash(export HTTPS_PROXY=\"http://127.0.0.1:7892\")",
+      "WebFetch(domain:personl-blog.vercel.app)",
+      "mcp__plugin_everything-claude-code_playwright__browser_navigate",
+      "Bash(curl -s https://personl-blog.vercel.app/)"
     ]
   }
 }
