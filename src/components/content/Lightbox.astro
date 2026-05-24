@@ -1,0 +1,43 @@
+<dialog id="lightbox" class="fixed inset-0 z-[110] w-full h-full max-w-none max-h-none bg-black/95 backdrop:bg-black/95 open:flex items-center justify-center p-4">
+  <div class="relative max-w-5xl w-full">
+    <button id="lightbox-close" class="absolute -top-12 right-0 text-white/70 hover:text-white text-sm transition-colors" autofocus>
+      关闭 (Esc)
+    </button>
+    <img id="lightbox-img" src="" alt="" class="w-full h-auto max-h-[80vh] object-contain" />
+    <button id="lightbox-prev" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 text-white/70 hover:text-white text-2xl transition-colors">&larr;</button>
+    <button id="lightbox-next" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 text-white/70 hover:text-white text-2xl transition-colors">&rarr;</button>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement;
+  const img = document.getElementById('lightbox-img') as HTMLImageElement;
+  let images: string[] = [];
+  let currentIdx = 0;
+
+  function showLightbox(imageUrls: string[], idx: number) {
+    images = imageUrls;
+    currentIdx = idx;
+    updateImage();
+    dialog.showModal();
+  }
+
+  function updateImage() {
+    img.src = images[currentIdx];
+  }
+
+  function next() { currentIdx = (currentIdx + 1) % images.length; updateImage(); }
+  function prev() { currentIdx = (currentIdx - 1 + images.length) % images.length; updateImage(); }
+
+  document.getElementById('lightbox-close')?.addEventListener('click', () => dialog.close());
+  document.getElementById('lightbox-next')?.addEventListener('click', next);
+  document.getElementById('lightbox-prev')?.addEventListener('click', prev);
+
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') dialog.close();
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  (window as any).showLightbox = showLightbox;
+</script>

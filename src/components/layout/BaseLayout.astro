@@ -2,6 +2,7 @@
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import SearchModal from '../search/SearchModal.astro';
+import Lightbox from '../content/Lightbox.astro';
 
 interface Props {
   title: string;
@@ -49,5 +50,6 @@ const fullTitle = `${title} — My Blog`;
     </main>
     <Footer />
     <SearchModal />
+    <Lightbox />
   </body>
 </html>

@@ -1,0 +1,30 @@
+---
+interface Props {
+  images: string[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="gallery flex gap-3 overflow-x-auto snap-x snap-mandatory -mx-6 px-6 pb-4">
+  {images.map((src, idx) => (
+    <div class="snap-start shrink-0 w-4/5 md:w-3/5 lg:w-1/2 cursor-pointer">
+      <img
+        src={src}
+        alt={`Gallery image ${idx + 1}`}
+        class="w-full h-64 md:h-80 object-cover rounded-card shadow-sm"
+        loading="lazy"
+        onclick={`window.showLightbox(${JSON.stringify(images)}, ${idx})`}
+      />
+    </div>
+  ))}
+</div>
+
+<style>
+  .gallery {
+    scrollbar-width: none;
+  }
+  .gallery::-webkit-scrollbar {
+    display: none;
+  }
+</style>
