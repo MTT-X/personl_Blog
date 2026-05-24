@@ -15,30 +15,39 @@ const navItems = [
     </a>
 
     <!-- Desktop nav -->
-    <div class="hidden md:flex items-center gap-8">
+    <ul class="hidden md:flex items-center gap-8" role="list">
       {navItems.map(item => (
-        <a href={item.href} class="text-sm text-apple-muted dark:text-apple-muted-dark hover:text-apple-text dark:hover:text-apple-text-dark transition-colors duration-150">
-          {item.label}
-        </a>
+        <li>
+          <a href={item.href} class="text-sm text-apple-muted dark:text-apple-muted-dark hover:text-apple-text dark:hover:text-apple-text-dark transition-colors duration-150">
+            {item.label}
+          </a>
+        </li>
       ))}
 
-      <button id="search-trigger" class="text-apple-muted dark:text-apple-muted-dark hover:text-apple-text dark:hover:text-apple-text-dark transition-colors duration-150" aria-label="搜索">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="7" cy="7" r="4.5" />
-          <path d="M10.5 10.5L14 14" />
-        </svg>
-      </button>
+      <li>
+        <button id="search-trigger" class="text-apple-muted dark:text-apple-muted-dark hover:text-apple-text dark:hover:text-apple-text-dark transition-colors duration-150" aria-label="搜索">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <title>搜索</title>
+            <circle cx="7" cy="7" r="4.5" />
+            <path d="M10.5 10.5L14 14" />
+          </svg>
+        </button>
+      </li>
 
-      <button id="theme-toggle" class="text-apple-muted dark:text-apple-muted-dark hover:text-apple-text dark:hover:text-apple-text-dark transition-colors duration-150" aria-label="切换暗黑模式">
-        <svg id="sun-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="hidden dark:block">
-          <circle cx="8" cy="8" r="3" />
-          <path d="M8 1v2M8 13v2M1 8h2M13 8h2M2.5 2.5l1.5 1.5M12 12l1.5 1.5M2.5 13.5l1.5-1.5M12 4l1.5-1.5" />
-        </svg>
-        <svg id="moon-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="block dark:hidden">
-          <path d="M6 2a6 6 0 1 0 8 8 4 4 0 0 1-8-8z" />
-        </svg>
-      </button>
-    </div>
+      <li>
+        <button id="theme-toggle" class="text-apple-muted dark:text-apple-muted-dark hover:text-apple-text dark:hover:text-apple-text-dark transition-colors duration-150" aria-label="切换暗黑模式">
+          <svg id="sun-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="hidden dark:block">
+            <title>浅色模式</title>
+            <circle cx="8" cy="8" r="3" />
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M2.5 2.5l1.5 1.5M12 12l1.5 1.5M2.5 13.5l1.5-1.5M12 4l1.5-1.5" />
+          </svg>
+          <svg id="moon-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="block dark:hidden">
+            <title>暗黑模式</title>
+            <path d="M6 2a6 6 0 1 0 8 8 4 4 0 0 1-8-8z" />
+          </svg>
+        </button>
+      </li>
+    </ul>
 
     <!-- Mobile menu button -->
     <div class="md:hidden flex items-center gap-4">
