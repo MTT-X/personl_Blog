@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+---
+
+<BaseLayout title="关于" description="关于我和这个博客" containerClass="prose">
+  <section class="py-10">
+    <h1>关于</h1>
+
+    <div class="mt-10 space-y-6 leading-relaxed">
+      <p class="text-lg">
+        你好，欢迎来到我的博客。
+      </p>
+      <p>
+        这里记录了我的技术思考、生活见闻和项目实践。喜欢简洁的设计和高质量的内容。
+      </p>
+      <p>
+        如有任何问题或建议，欢迎通过 GitHub 联系我。
+      </p>
+    </div>
+
+    <div class="mt-16">
+      <h2 class="text-xl mb-4">联系方式</h2>
+      <div class="flex gap-4 text-apple-accent">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:underline">GitHub</a>
+        <a href="/rss.xml" class="hover:underline">RSS</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

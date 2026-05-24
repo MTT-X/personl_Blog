@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import ArticleCard from '../../components/ui/ArticleCard.astro';
+import JournalCard from '../../components/ui/JournalCard.astro';
+import ProjectCard from '../../components/ui/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  const journal = await getCollection('journal', ({ data }) => !data.draft);
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  const allTags = new Set([
+    ...articles.flatMap(a => a.data.tags || []),
+    ...journal.flatMap(j => j.data.tags || []),
+    ...projects.flatMap(p => p.data.tags || []),
+  ]);
+  return [...allTags].map(tag => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft && (data.tags || []).includes(tag!)))
+  .map(e => ({ ...e, type: 'article' as const }))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const journal = (await getCollection('journal', ({ data }) => !data.draft && (data.tags || []).includes(tag!)))
+  .map(e => ({ ...e, type: 'journal' as const }))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft && (data.tags || []).includes(tag!)))
+  .map(e => ({ ...e, type: 'project' as const }))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const allEntries = [...articles, ...journal, ...projects]
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<BaseLayout title={`标签: ${tag}`} description={`查看所有标记为 ${tag} 的内容`} containerClass="prose">
+  <h1 class="mb-2">#{tag}</h1>
+  <p class="text-apple-muted dark:text-apple-muted-dark mb-10">{allEntries.length} 篇相关内容</p>
+
+  <div class="space-y-8">
+    {allEntries.map((entry) => {
+      switch (entry.type) {
+        case 'article': return <ArticleCard article={entry} />;
+        case 'journal': return <JournalCard entry={entry} />;
+        case 'project': return <ProjectCard project={entry} />;
+      }
+    })}
+  </div>
+</BaseLayout>

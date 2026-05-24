@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import JournalCard from '../../components/ui/JournalCard.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('journal', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<BaseLayout title="图文日志" description="旅行与摄影日志" containerClass="wide">
+  <h1 class="mb-4">日志</h1>
+  <p class="text-apple-muted dark:text-apple-muted-dark mb-10">用镜头记录的瞬间</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {entries.map(entry => <JournalCard {entry} />)}
+    {entries.length === 0 && (
+      <p class="col-span-full text-center text-apple-muted py-20">暂无日志</p>
+    )}
+  </div>
+</BaseLayout>

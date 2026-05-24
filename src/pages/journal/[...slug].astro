@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Gallery from '../../components/content/Gallery.astro';
+import { formatDate } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  return entries.map(e => ({ params: { slug: e.slug } }));
+}
+
+const { slug } = Astro.params;
+const entry = (await getCollection('journal', ({ data }) => !data.draft))
+  .find(e => e.slug === slug);
+
+if (!entry) return Astro.redirect('/404');
+
+const { Content } = await entry.render();
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description} containerClass="prose">
+  <article>
+    <header class="mb-12">
+      <div class="flex items-center gap-2 text-sm text-apple-muted dark:text-apple-muted-dark">
+        <time>{formatDate(entry.data.publishedAt)}</time>
+        {entry.data.location && <><span>&middot;</span><span>{entry.data.location}</span></>}
+      </div>
+      <h1 class="mt-3">{entry.data.title}</h1>
+    </header>
+
+    {entry.data.gallery && entry.data.gallery.length > 0 && (
+      <Gallery images={entry.data.gallery} />
+    )}
+
+    <div class="prose-lg leading-relaxed mt-12">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

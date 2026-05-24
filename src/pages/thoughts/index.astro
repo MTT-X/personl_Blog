@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import ThoughtCard from '../../components/ui/ThoughtCard.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('thoughts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<BaseLayout title="短思考" description="碎片化思考与灵感" containerClass="prose">
+  <h1 class="mb-4">思考</h1>
+  <p class="text-apple-muted dark:text-apple-muted-dark mb-10">一些不成熟的碎碎念</p>
+
+  <div class="space-y-6">
+    {entries.map(entry => <ThoughtCard {entry} />)}
+    {entries.length === 0 && (
+      <p class="text-center text-apple-muted py-20">还没有思考记录</p>
+    )}
+  </div>
+</BaseLayout>

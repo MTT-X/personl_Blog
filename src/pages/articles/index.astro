@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import ArticleCard from '../../components/ui/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const allTags = [...new Set(allArticles.flatMap(a => a.data.tags || []))].sort();
+const selectedTag = Astro.url.searchParams.get('tag');
+
+const articles = (selectedTag
+  ? allArticles.filter(a => (a.data.tags || []).includes(selectedTag))
+  : allArticles
+).sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<BaseLayout title="文章" description="长文技术文章" containerClass="prose">
+  <h1 class="mb-4">文章</h1>
+  <p class="text-apple-muted dark:text-apple-muted-dark mb-10">长文技术分享与深度思考</p>
+
+  {allTags.length > 0 && (
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a
+        href="/articles"
+        class={`inline-block px-3 py-1 text-xs rounded-full transition-colors ${
+          !selectedTag
+            ? 'bg-apple-accent text-white'
+            : 'bg-apple-divider dark:bg-apple-divider-dark text-apple-muted dark:text-apple-muted-dark hover:text-apple-accent'
+        }`}
+      >
+        全部
+      </a>
+      {allTags.map(tag => (
+        <a
+          href={`/articles?tag=${tag}`}
+          class={`inline-block px-3 py-1 text-xs rounded-full transition-colors ${
+            selectedTag === tag
+              ? 'bg-apple-accent text-white'
+              : 'bg-apple-divider dark:bg-apple-divider-dark text-apple-muted dark:text-apple-muted-dark hover:text-apple-accent'
+          }`}
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+  )}
+
+  <div class="space-y-8">
+    {articles.map(article => <ArticleCard article={article} />)}
+    {articles.length === 0 && (
+      <p class="text-center text-apple-muted py-20">暂无文章</p>
+    )}
+  </div>
+</BaseLayout>

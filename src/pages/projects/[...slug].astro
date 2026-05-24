@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import TagBadge from '../../components/ui/TagBadge.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects', ({ data }) => !data.draft);
+  return entries.map(e => ({ params: { slug: e.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = (await getCollection('projects', ({ data }) => !data.draft))
+  .find(p => p.slug === slug);
+
+if (!project) return Astro.redirect('/404');
+
+const { Content } = await project.render();
+---
+
+<BaseLayout title={project.data.title} description={project.data.description} containerClass="prose">
+  <article>
+    <header class="mb-12">
+      <h1>{project.data.title}</h1>
+      <p class="mt-3 text-apple-muted dark:text-apple-muted-dark">{project.data.description}</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {project.data.tech?.map((t: string) => <TagBadge tag={t} />)}
+      </div>
+      {project.data.url && (
+        <a href={project.data.url} target="_blank" rel="noopener noreferrer"
+           class="inline-block mt-4 text-sm text-apple-accent hover:underline">
+          访问项目 &rarr;
+        </a>
+      )}
+    </header>
+
+    <div class="prose-lg leading-relaxed">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

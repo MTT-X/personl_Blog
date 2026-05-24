@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { formatDate } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('thoughts', ({ data }) => !data.draft);
+  return entries.map(e => ({ params: { slug: e.slug } }));
+}
+
+const { slug } = Astro.params;
+const entry = (await getCollection('thoughts', ({ data }) => !data.draft))
+  .find(e => e.slug === slug);
+
+if (!entry) return Astro.redirect('/404');
+---
+
+<BaseLayout title={entry.data.title || '思考'} description={entry.body.slice(0, 160)} containerClass="prose">
+  <article class="py-20">
+    <blockquote class="text-2xl leading-relaxed text-apple-text dark:text-apple-text-dark">
+      {entry.body}
+    </blockquote>
+    <time class="mt-8 block text-sm text-apple-muted dark:text-apple-muted-dark">
+      {formatDate(entry.data.publishedAt)}
+    </time>
+  </article>
+</BaseLayout>
