@@ -6,4 +6,11 @@ export default defineConfig({
   integrations: [mdx(), tailwind()],
   site: 'https://your-domain.com',
   output: 'static',
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['/pagefind/pagefind.js'],
+      },
+    },
+  },
 });
